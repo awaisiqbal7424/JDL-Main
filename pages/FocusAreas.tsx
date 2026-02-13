@@ -42,8 +42,18 @@ export const FocusAreas: React.FC = () => {
 
   return (
     <div className="min-h-screen">
-       <div className="bg-white rounded-b-[3rem] shadow-sm mb-16">
-         <div className="max-w-7xl mx-auto px-6 py-20 text-center">
+       <div className="bg-white rounded-b-[3rem] shadow-sm mb-16 relative overflow-hidden">
+         {/* Abstract Bar Chart Graphic */}
+         <div className="absolute bottom-0 left-0 w-full h-24 flex items-end space-x-2 px-10 opacity-5 pointer-events-none">
+            {Array.from({ length: 20 }).map((_, i) => (
+                <div key={i} 
+                     className="w-full bg-jdl-red" 
+                     style={{ height: `${Math.random() * 80 + 20}%`, opacity: Math.random() }} 
+                />
+            ))}
+         </div>
+
+         <div className="max-w-7xl mx-auto px-6 pt-40 pb-20 text-center relative z-10">
             <h1 className="text-4xl md:text-5xl font-serif font-bold text-jdl-black mb-6">Our Areas of Expertise</h1>
             <p className="text-xl text-jdl-subtext max-w-2xl mx-auto font-light">
                 Deep dives into the critical pillars of national development, supported by rigorous data and field research.

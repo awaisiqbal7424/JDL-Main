@@ -50,7 +50,7 @@ export const CivicAI: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen pt-4 pb-12 px-4 sm:px-6">
+    <div className="min-h-screen pt-36 pb-12 px-4 sm:px-6">
       
       {/* Header Info */}
       <div className="max-w-4xl mx-auto text-center mb-10">

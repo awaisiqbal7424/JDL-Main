@@ -23,8 +23,20 @@ export const Contact: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen">
-      <div className="max-w-7xl mx-auto px-6 py-12 md:py-20">
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Background Graphic: Connectivity Nodes */}
+      <svg className="absolute top-0 left-0 w-full h-[600px] text-gray-200 opacity-50 pointer-events-none -z-10" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
+         <circle cx="100" cy="100" r="2" fill="currentColor" />
+         <circle cx="700" cy="150" r="4" fill="currentColor" />
+         <circle cx="400" cy="500" r="3" fill="currentColor" />
+         <circle cx="200" cy="400" r="2" fill="currentColor" />
+         <line x1="100" y1="100" x2="700" y2="150" stroke="currentColor" strokeWidth="0.5" />
+         <line x1="100" y1="100" x2="200" y2="400" stroke="currentColor" strokeWidth="0.5" />
+         <line x1="700" y1="150" x2="400" y2="500" stroke="currentColor" strokeWidth="0.5" />
+         <line x1="200" y1="400" x2="400" y2="500" stroke="currentColor" strokeWidth="0.5" />
+      </svg>
+
+      <div className="max-w-7xl mx-auto px-6 pt-36 pb-20">
         <div className="max-w-4xl mx-auto">
             <div className="text-center mb-16">
                 <h1 className="text-4xl md:text-5xl font-serif font-bold text-jdl-black mb-6">Partner with JDL</h1>
