@@ -4,9 +4,9 @@ export const About: React.FC = () => {
   return (
     <div className="min-h-screen pb-20">
       {/* Header */}
-      <div className="bg-white rounded-b-[3rem] shadow-sm mb-12 relative overflow-hidden">
+      <div className="bg-jdl-red rounded-b-[3rem] shadow-sm mb-12 relative overflow-hidden">
         {/* SVG Graphic: Topographic Data Map */}
-        <svg className="absolute top-0 left-0 w-full h-full text-gray-100 opacity-40 pointer-events-none" viewBox="0 0 800 300" preserveAspectRatio="none">
+        <svg className="absolute top-0 left-0 w-full h-full text-white opacity-10 pointer-events-none" viewBox="0 0 800 300" preserveAspectRatio="none">
              <path d="M0,150 Q200,50 400,150 T800,150" fill="none" stroke="currentColor" strokeWidth="2" />
              <path d="M0,180 Q200,80 400,180 T800,180" fill="none" stroke="currentColor" strokeWidth="2" />
              <path d="M0,210 Q200,110 400,210 T800,210" fill="none" stroke="currentColor" strokeWidth="2" />
@@ -14,8 +14,8 @@ export const About: React.FC = () => {
         </svg>
 
         <div className="max-w-7xl mx-auto px-6 pt-40 pb-20 text-center relative z-10">
-          <h1 className="text-5xl md:text-6xl font-serif font-bold text-jdl-black mb-6">Evidence-Based.<br/>Technology-Enabled.</h1>
-          <div className="w-24 h-1.5 bg-jdl-red rounded-full mx-auto"></div>
+          <h1 className="text-5xl md:text-6xl font-serif font-bold text-white mb-6">Evidence-Based.<br/>Technology-Enabled.</h1>
+          <div className="w-24 h-1.5 bg-white rounded-full mx-auto"></div>
         </div>
       </div>
 
