@@ -32,9 +32,11 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
               {/* Logo */}
               <div className="flex items-center">
                 <Link to="/" className="flex items-center space-x-3 group">
-                  <div className="w-10 h-10 bg-jdl-red rounded-full flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
-                    <span className="text-white font-serif font-bold text-xl">J</span>
-                  </div>
+                  <img 
+                    src="https://drive.google.com/uc?export=view&id=1IL58loUeiFr-ELQRxMIGzrZEeMcdSsgz" 
+                    alt="JDL Logo" 
+                    className="h-10 w-auto object-contain group-hover:scale-105 transition-transform" 
+                  />
                   <div className="flex flex-col">
                     <span className="font-serif font-bold text-jdl-text text-lg leading-none">JDL</span>
                   </div>
@@ -67,7 +69,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                     className="inline-flex items-center px-6 py-2.5 bg-jdl-red text-white text-sm font-bold rounded-full hover:bg-red-900 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
                  >
                     <BrainIcon className="w-4 h-4 mr-2" />
-                    Civic AI
+                    CivicAI
                  </Link>
               </div>
 
@@ -108,7 +110,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                     className="flex items-center w-full px-4 py-3 rounded-2xl text-base font-bold bg-jdl-red text-white shadow-md mt-2"
                 >
                     <BrainIcon className="w-5 h-5 mr-3" />
-                    Launch Civic AI
+                    CivicAI
                 </Link>
               </div>
             </div>
@@ -127,9 +129,11 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
             <div className="col-span-1 md:col-span-2 space-y-6">
               <div className="flex items-center space-x-3">
-                 <div className="w-8 h-8 bg-jdl-red rounded-full flex items-center justify-center">
-                    <span className="text-white font-serif font-bold text-lg">J</span>
-                 </div>
+                 <img 
+                    src="https://drive.google.com/uc?export=view&id=1IL58loUeiFr-ELQRxMIGzrZEeMcdSsgz" 
+                    alt="JDL Logo" 
+                    className="h-10 w-auto object-contain bg-white rounded-md p-1" 
+                 />
                  <span className="font-serif text-2xl font-bold">Jafri Development Lab</span>
               </div>
               <p className="text-gray-400 max-w-sm text-lg font-light leading-relaxed">
