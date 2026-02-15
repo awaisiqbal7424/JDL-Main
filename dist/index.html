@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jafri Development Lab (JDL)</title>
+    <meta name="description" content="Bridging the Gap Between Data, Policy, and Impact." />
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              serif: ['Merriweather', 'serif'],
+            },
+            colors: {
+              jdl: {
+                red: '#6e131a',      // Main Primary
+                black: '#000000',    // Secondary
+                white: '#ffffff',
+                gray: '#f2f2f7',     // iOS System Gray 6 (Backgrounds)
+                card: '#ffffff',
+                text: '#1c1c1e',     // iOS System Label Color
+                subtext: '#8e8e93',  // iOS System Gray
+                border: '#e5e5ea',   // iOS System Gray 3-4
+              }
+            },
+            boxShadow: {
+              'ios': '0 4px 20px rgba(0, 0, 0, 0.08)',
+              'ios-hover': '0 8px 30px rgba(0, 0, 0, 0.12)',
+            }
+          },
+        },
+      }
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Merriweather:wght@300;400;700;900&display=swap"
+      rel="stylesheet"
+    />
+
+<link rel="stylesheet" href="/index.css">
+  <script type="importmap">
+{
+  "imports": {
+    "react-router-dom": "https://esm.sh/react-router-dom@^7.13.0",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "react": "https://esm.sh/react@^19.2.4",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/"
+  }
+}
+</script>
+  <script type="module" crossorigin src="/assets/index-rtfT_g8y.js"></script>
+</head>
+  <body class="bg-jdl-gray text-jdl-text font-sans antialiased selection:bg-jdl-red selection:text-white">
+    <div id="root"></div>
+</body>
+</html>
