@@ -31,15 +31,12 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
               
               {/* Logo */}
               <div className="flex items-center">
-                <Link to="/" className="flex items-center space-x-3 group">
+                <Link to="/" className="flex items-center group">
                   <img 
                     src="https://drive.google.com/uc?export=view&id=1IL58loUeiFr-ELQRxMIGzrZEeMcdSsgz" 
                     alt="JDL Logo" 
-                    className="h-10 w-auto object-contain group-hover:scale-105 transition-transform" 
+                    className="h-12 w-auto object-contain group-hover:scale-105 transition-transform" 
                   />
-                  <div className="flex flex-col">
-                    <span className="font-serif font-bold text-jdl-text text-lg leading-none">JDL</span>
-                  </div>
                 </Link>
               </div>
 
