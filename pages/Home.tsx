@@ -2,6 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRightIcon, BrainIcon, ChartIcon, ShieldIcon, BookIcon, HeartIcon } from '../components/Icons';
 
+// Helper: fires a custom event that Layout.tsx listens to in order to open the chat panel
+const openCivicAI = () => {
+  window.dispatchEvent(new CustomEvent('open-civic-ai'));
+};
+
 export const Home: React.FC = () => {
   return (
     <div className="flex flex-col">
@@ -75,13 +80,15 @@ export const Home: React.FC = () => {
                 >
                   Explore Our Research
                 </Link>
-                <Link
-                  to="/civic-ai"
+
+                {/* ── Opens the floating CivicAI chat panel ── */}
+                <button
+                  onClick={openCivicAI}
                   className="inline-flex items-center justify-center px-10 py-4 border border-white/30 text-lg font-medium rounded-full text-white bg-white/10 backdrop-blur-md hover:bg-white/20 hover:scale-105 transition-all duration-300"
                 >
                   Talk to Civic AI
                   <ChevronRightIcon className="ml-2 w-5 h-5" />
-                </Link>
+                </button>
               </div>
             </div>
           </div>
@@ -102,14 +109,16 @@ export const Home: React.FC = () => {
                   Introducing Civic AI:<br />The Future of Policy Intelligence.
                 </h2>
                 <p className="text-lg text-jdl-text/70 mb-10 leading-relaxed">
-                  Data should not be locked in PDFs. JDL introduces Pakistan’s first Civic AI—a conversational interface that allows policymakers, researchers, and citizens to query complex development data instantly.
+                  Data should not be locked in PDFs. JDL introduces Pakistan's first Civic AI—a conversational interface that allows policymakers, researchers, and citizens to query complex development data instantly.
                 </p>
-                <Link
-                  to="/civic-ai"
+
+                {/* ── Opens the floating CivicAI chat panel ── */}
+                <button
+                  onClick={openCivicAI}
                   className="inline-flex items-center text-jdl-red font-bold text-lg hover:underline decoration-2 underline-offset-4"
                 >
                   Try the Beta Version <ChevronRightIcon className="ml-2 w-5 h-5" />
-                </Link>
+                </button>
               </div>
               
               <div className="relative">

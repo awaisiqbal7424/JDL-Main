@@ -6,7 +6,6 @@ import { MenuIcon, XIcon, BrainIcon, ChevronRightIcon } from './Icons';
 const NAV_ITEMS: NavItem[] = [
   { label: 'Home', path: '/' },
   { label: 'About', path: '/about' },
-  // Civic AI removed from here to be a standalone button
   { label: 'Focus Areas', path: '/focus-areas' },
   { label: 'Publications', path: '/publications' },
   { label: 'Contact', path: '/contact' },
@@ -14,12 +13,18 @@ const NAV_ITEMS: NavItem[] = [
 
 export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
   const { pathname } = useLocation();
 
   // Close mobile menu on route change
   useEffect(() => {
     setIsMenuOpen(false);
   }, [pathname]);
+
+  const toggleChat = () => {
+    setIsChatOpen(prev => !prev);
+    setIsMenuOpen(false); // close mobile menu if open
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-jdl-gray">
@@ -28,14 +33,14 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
         <nav className="w-full max-w-6xl bg-white/80 backdrop-blur-xl border border-white/20 shadow-ios rounded-full transition-all duration-300">
           <div className="px-6">
             <div className="flex justify-between items-center h-16">
-              
+
               {/* Logo */}
               <div className="flex items-center">
                 <Link to="/" className="flex items-center group">
-                  <img 
-                    src="https://drive.google.com/uc?export=view&id=1IL58loUeiFr-ELQRxMIGzrZEeMcdSsgz" 
-                    alt="JDL Logo" 
-                    className="h-12 w-auto object-contain group-hover:scale-105 transition-transform" 
+                  <img
+                    src="jdl_logo.png"
+                    alt="JDL Logo"
+                    className="h-12 w-auto object-contain group-hover:scale-105 transition-transform"
                   />
                 </Link>
               </div>
@@ -59,15 +64,17 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                 ))}
               </div>
 
-              {/* CTA Button (Desktop) - Civic AI */}
+              {/* CTA Button (Desktop) - toggles chat panel */}
               <div className="hidden md:flex items-center pl-2">
-                 <Link 
-                    to="/civic-ai"
-                    className="inline-flex items-center px-6 py-2.5 bg-jdl-red text-white text-sm font-bold rounded-full hover:bg-red-900 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
-                 >
-                    <BrainIcon className="w-4 h-4 mr-2" />
-                    CivicAI
-                 </Link>
+                <button
+                  onClick={toggleChat}
+                  className={`inline-flex items-center px-6 py-2.5 text-white text-sm font-bold rounded-full transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 ${
+                    isChatOpen ? 'bg-red-900' : 'bg-jdl-red hover:bg-red-900'
+                  }`}
+                >
+                  <BrainIcon className="w-4 h-4 mr-2" />
+                  {isChatOpen ? 'Close CivicAI' : 'CivicAI'}
+                </button>
               </div>
 
               {/* Mobile menu button */}
@@ -101,19 +108,103 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                     {item.label}
                   </NavLink>
                 ))}
-                {/* Mobile Civic AI Button */}
-                <Link
-                    to="/civic-ai"
-                    className="flex items-center w-full px-4 py-3 rounded-2xl text-base font-bold bg-jdl-red text-white shadow-md mt-2"
+                {/* Mobile CivicAI Button - toggles chat */}
+                <button
+                  onClick={toggleChat}
+                  className="flex items-center w-full px-4 py-3 rounded-2xl text-base font-bold bg-jdl-red text-white shadow-md mt-2"
                 >
-                    <BrainIcon className="w-5 h-5 mr-3" />
-                    CivicAI
-                </Link>
+                  <BrainIcon className="w-5 h-5 mr-3" />
+                  {isChatOpen ? 'Close CivicAI' : 'CivicAI'}
+                </button>
               </div>
             </div>
           )}
         </nav>
       </div>
+
+      {/* ── Floating Chat Panel ── */}
+      {/* Panel */}
+      <div
+        style={{
+          position: 'fixed',
+          bottom: '104px',
+          right: '28px',
+          zIndex: 9998,
+          width: '380px',
+          height: '580px',
+          borderRadius: '20px',
+          overflow: 'hidden',
+          boxShadow: '0 16px 56px rgba(0,0,0,0.24)',
+          display: isChatOpen ? 'block' : 'none',
+          opacity: isChatOpen ? 1 : 0,
+          transform: isChatOpen ? 'scale(1) translateY(0)' : 'scale(0.93) translateY(14px)',
+          transformOrigin: 'bottom right',
+          transition: 'opacity 0.22s ease, transform 0.22s ease',
+        }}
+      >
+        {/* @ts-ignore - custom web component */}
+        <chat-messenger url-allowlist="*" style={{ width: '100%', height: '100%', display: 'block' }}>
+          {/* @ts-ignore */}
+          <chat-messenger-container
+            chat-title="CivicAI"
+            chat-title-icon="https://gstatic.com/dialogflow-console/common/assets/ccai-favicons/conversational_agents.png"
+            enable-file-upload
+          >
+            {/* @ts-ignore */}
+            <chat-reset-session-button
+              slot="titlebar-actions"
+              title-text="Start new chat"
+            />
+          {/* @ts-ignore */}
+          </chat-messenger-container>
+        {/* @ts-ignore */}
+        </chat-messenger>
+      </div>
+
+      {/* Floating Circle FAB (also toggles the panel) */}
+      <button
+        onClick={toggleChat}
+        aria-label={isChatOpen ? 'Close CivicAI Chat' : 'Open CivicAI Chat'}
+        style={{
+          position: 'fixed',
+          bottom: '28px',
+          right: '28px',
+          zIndex: 9999,
+          width: '62px',
+          height: '62px',
+          borderRadius: '50%',
+          background: '#6e131a',
+          boxShadow: isChatOpen
+            ? '0 8px 32px rgba(0,0,0,0.35)'
+            : '0 4px 24px rgba(0,0,0,0.28)',
+          border: 'none',
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          transform: isChatOpen ? 'scale(1.08)' : 'scale(1)',
+          transition: 'transform 0.2s, box-shadow 0.2s',
+        }}
+      >
+        {isChatOpen ? (
+          /* X icon when open */
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <line x1="18" y1="6" x2="6" y2="18" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
+            <line x1="6" y1="6" x2="18" y2="18" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
+          </svg>
+        ) : (
+          /* Chat bubble icon when closed */
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+            <path
+              d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+              stroke="white"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        )}
+      </button>
 
       {/* Main Content */}
       <main className="flex-grow">
@@ -126,12 +217,12 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
             <div className="col-span-1 md:col-span-2 space-y-6">
               <div className="flex items-center space-x-3">
-                 <img 
-                    src="https://drive.google.com/uc?export=view&id=1IL58loUeiFr-ELQRxMIGzrZEeMcdSsgz" 
-                    alt="JDL Logo" 
-                    className="h-10 w-auto object-contain bg-white rounded-md p-1" 
-                 />
-                 <span className="font-serif text-2xl font-bold">Jafri Development Lab</span>
+                <img
+                  src="https://drive.google.com/uc?export=view&id=1IL58loUeiFr-ELQRxMIGzrZEeMcdSsgz"
+                  alt="JDL Logo"
+                  className="h-10 w-auto object-contain bg-white rounded-md p-1"
+                />
+                <span className="font-serif text-2xl font-bold">Jafri Development Lab</span>
               </div>
               <p className="text-gray-400 max-w-sm text-lg font-light leading-relaxed">
                 Combining rigorous economic research with advanced artificial intelligence to solve complex development challenges.
@@ -140,13 +231,12 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                 {['LinkedIn', 'Twitter', 'Facebook'].map(social => (
                   <a key={social} href="#" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-jdl-red transition-all duration-300">
                     <span className="sr-only">{social}</span>
-                    {/* Simple placeholder icon for socials */}
                     <div className="w-4 h-4 bg-current rounded-sm opacity-50"></div>
                   </a>
                 ))}
               </div>
             </div>
-            
+
             <div>
               <h3 className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-6">Focus Areas</h3>
               <ul className="space-y-4">
