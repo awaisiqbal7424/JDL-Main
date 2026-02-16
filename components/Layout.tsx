@@ -13,7 +13,12 @@ const NAV_ITEMS: NavItem[] = [
 
 export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+
+  // Ref so the event listener always calls the latest toggleChat
+  const toggleChatRef = React.useRef<() => void>(() => {});
+
   const { pathname } = useLocation();
 
   // Close mobile menu on route change
@@ -21,14 +26,43 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
     setIsMenuOpen(false);
   }, [pathname]);
 
-  const toggleChat = () => {
-    setIsChatOpen(prev => !prev);
-    setIsMenuOpen(false); // close mobile menu if open
+  // Listen for 'toggle-civic-ai' custom event fired by Home.tsx buttons
+  useEffect(() => {
+    const handler = () => toggleChatRef.current();
+    window.addEventListener('toggle-civic-ai', handler);
+    return () => window.removeEventListener('toggle-civic-ai', handler);
+  }, []);
+
+  const openChat = () => {
+    setIsMenuOpen(false);
+    setIsMounted(true);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => setIsVisible(true));
+    });
   };
+
+  const closeChat = () => {
+    setIsVisible(false);
+    setTimeout(() => setIsMounted(false), 240);
+  };
+
+  const toggleChat = () => {
+    if (isMounted && isVisible) {
+      closeChat();
+    } else {
+      openChat();
+    }
+  };
+
+  // Keep ref in sync with latest toggleChat
+  toggleChatRef.current = toggleChat;
+
+  const isChatOpen = isMounted && isVisible;
 
   return (
     <div className="min-h-screen flex flex-col bg-jdl-gray">
-      {/* Navigation - iOS Style Floating Bar */}
+
+      {/* ── Navigation ── */}
       <div className="fixed top-0 left-0 right-0 z-50 px-4 pt-4 flex justify-center">
         <nav className="w-full max-w-6xl bg-white/80 backdrop-blur-xl border border-white/20 shadow-ios rounded-full transition-all duration-300">
           <div className="px-6">
@@ -40,12 +74,12 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                   <img
                     src="jdl_logo.png"
                     alt="JDL Logo"
-                    className="h-12 w-auto object-contain group-hover:scale-105 transition-transform"
+                    className="h-14 w-auto object-contain group-hover:scale-105 transition-transform"
                   />
                 </Link>
               </div>
 
-              {/* Desktop Nav */}
+              {/* Desktop Nav Links */}
               <div className="hidden md:flex items-center space-x-1">
                 {NAV_ITEMS.map((item) => (
                   <NavLink
@@ -64,7 +98,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                 ))}
               </div>
 
-              {/* CTA Button (Desktop) - toggles chat panel */}
+              {/* Desktop CivicAI button — toggles chat */}
               <div className="hidden md:flex items-center pl-2">
                 <button
                   onClick={toggleChat}
@@ -77,7 +111,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                 </button>
               </div>
 
-              {/* Mobile menu button */}
+              {/* Mobile hamburger */}
               <div className="flex items-center md:hidden">
                 <button
                   onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -89,7 +123,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
             </div>
           </div>
 
-          {/* Mobile Menu Dropdown */}
+          {/* Mobile Dropdown */}
           {isMenuOpen && (
             <div className="md:hidden absolute top-20 left-0 right-0 px-4">
               <div className="bg-white/90 backdrop-blur-xl rounded-3xl shadow-ios-hover p-4 space-y-2 border border-white/20">
@@ -108,7 +142,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                     {item.label}
                   </NavLink>
                 ))}
-                {/* Mobile CivicAI Button - toggles chat */}
+                {/* Mobile CivicAI button */}
                 <button
                   onClick={toggleChat}
                   className="flex items-center w-full px-4 py-3 rounded-2xl text-base font-bold bg-jdl-red text-white shadow-md mt-2"
@@ -123,45 +157,46 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
       </div>
 
       {/* ── Floating Chat Panel ── */}
-      {/* Panel */}
-      <div
-        style={{
-          position: 'fixed',
-          bottom: '104px',
-          right: '28px',
-          zIndex: 9998,
-          width: '380px',
-          height: '580px',
-          borderRadius: '20px',
-          overflow: 'hidden',
-          boxShadow: '0 16px 56px rgba(0,0,0,0.24)',
-          display: isChatOpen ? 'block' : 'none',
-          opacity: isChatOpen ? 1 : 0,
-          transform: isChatOpen ? 'scale(1) translateY(0)' : 'scale(0.93) translateY(14px)',
-          transformOrigin: 'bottom right',
-          transition: 'opacity 0.22s ease, transform 0.22s ease',
-        }}
-      >
-        {/* @ts-ignore - custom web component */}
-        <chat-messenger url-allowlist="*" style={{ width: '100%', height: '100%', display: 'block' }}>
-          {/* @ts-ignore */}
-          <chat-messenger-container
-            chat-title="CivicAI"
-            chat-title-icon="https://gstatic.com/dialogflow-console/common/assets/ccai-favicons/conversational_agents.png"
-            enable-file-upload
-          >
+      {isMounted && (
+        <div
+          style={{
+            position: 'fixed',
+            bottom: '104px',
+            right: '28px',
+            zIndex: 9998,
+            width: '380px',
+            height: '580px',
+            borderRadius: '20px',
+            overflow: 'hidden',
+            boxShadow: '0 16px 56px rgba(0,0,0,0.24)',
+            opacity: isVisible ? 1 : 0,
+            transform: isVisible ? 'scale(1) translateY(0)' : 'scale(0.93) translateY(14px)',
+            transformOrigin: 'bottom right',
+            transition: 'opacity 0.22s ease, transform 0.22s ease',
+            pointerEvents: isVisible ? 'auto' : 'none',
+          }}
+        >
+          {/* @ts-ignore - custom web component */}
+          <chat-messenger url-allowlist="*" style={{ width: '100%', height: '100%', display: 'block' }}>
             {/* @ts-ignore */}
-            <chat-reset-session-button
-              slot="titlebar-actions"
-              title-text="Start new chat"
-            />
+            <chat-messenger-container
+              chat-title="CivicAI"
+              chat-title-icon="https://gstatic.com/dialogflow-console/common/assets/ccai-favicons/conversational_agents.png"
+              enable-file-upload
+            >
+              {/* @ts-ignore */}
+              <chat-reset-session-button
+                slot="titlebar-actions"
+                title-text="Start new chat"
+              />
+            {/* @ts-ignore */}
+            </chat-messenger-container>
           {/* @ts-ignore */}
-          </chat-messenger-container>
-        {/* @ts-ignore */}
-        </chat-messenger>
-      </div>
+          </chat-messenger>
+        </div>
+      )}
 
-      {/* Floating Circle FAB (also toggles the panel) */}
+      {/* ── Floating Circle FAB ── */}
       <button
         onClick={toggleChat}
         aria-label={isChatOpen ? 'Close CivicAI Chat' : 'Open CivicAI Chat'}
@@ -187,13 +222,11 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
         }}
       >
         {isChatOpen ? (
-          /* X icon when open */
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
             <line x1="18" y1="6" x2="6" y2="18" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
             <line x1="6" y1="6" x2="18" y2="18" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
           </svg>
         ) : (
-          /* Chat bubble icon when closed */
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
             <path
               d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
@@ -206,12 +239,12 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
         )}
       </button>
 
-      {/* Main Content */}
+      {/* ── Main Content ── */}
       <main className="flex-grow">
         {children}
       </main>
 
-      {/* Footer */}
+      {/* ── Footer ── */}
       <footer className="bg-jdl-black text-white rounded-t-[3rem] mt-12 overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 py-16">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
@@ -252,7 +285,11 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
               <address className="not-italic space-y-4 text-gray-300">
                 <p>SOE, QAU</p>
                 <p>Islamabad, Pakistan</p>
-                <p><a href="mailto:jaridevelopmentlab@gmail.com" className="text-white font-medium hover:underline decoration-jdl-red underline-offset-4">jaridevelopmentlab@gmail.com</a></p>
+                <p>
+                  <a href="mailto:jaridevelopmentlab@gmail.com" className="text-white font-medium hover:underline decoration-jdl-red underline-offset-4">
+                    jaridevelopmentlab@gmail.com
+                  </a>
+                </p>
               </address>
             </div>
           </div>
@@ -261,6 +298,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
           </div>
         </div>
       </footer>
+
     </div>
   );
 };

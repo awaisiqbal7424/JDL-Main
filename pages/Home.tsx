@@ -2,9 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRightIcon, BrainIcon, ChartIcon, ShieldIcon, BookIcon, HeartIcon } from '../components/Icons';
 
-// Helper: fires a custom event that Layout.tsx listens to in order to open the chat panel
+// Helper: fires a custom event that Layout.tsx listens to in order to toggle the chat panel
 const openCivicAI = () => {
-  window.dispatchEvent(new CustomEvent('open-civic-ai'));
+  window.dispatchEvent(new CustomEvent('toggle-civic-ai'));
 };
 
 export const Home: React.FC = () => {
